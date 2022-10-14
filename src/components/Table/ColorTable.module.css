@@ -1,0 +1,15 @@
+.ColorTable__tableContainer {
+    border-collapse: separate;
+    border-spacing: 0px 20px;
+}
+
+.ColorTable__plate {
+    width: 2.5rem;
+    height: 1.4rem !important;
+    border-radius: 0.25rem;
+}
+
+.ColorTable__heading {
+    font-size: 16px;
+    font-weight: 500;
+}
