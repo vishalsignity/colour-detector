@@ -1,92 +1,107 @@
-import React, { useState } from 'react'
-import { Col, Input, Label, Row } from 'reactstrap'
-import { hexColorDelta, rgbToHex } from '../../utils';
-import { IColorList, ToasterType } from '../../utils/interfaces';
-import { toaster } from '../../utils/toaster';
+import React from 'react'
+import { Button, Col, Form, Input, Label, Row } from 'reactstrap'
+import { searchColour } from '../../utils';
+import { IColorList, ISearch } from '../../utils/interfaces';
+import style from "./InputSearch.module.css";
 
 interface IProps {
+    search: ISearch;
+    setSearch: (value: ISearch) => void;
     colorList: IColorList[];
     setColorList: (value: IColorList[]) => void;
     getColorInfo: () => void;
 }
 
+interface ISearchInfo {
+    sortedColorList: IColorList[];
+    hex: string;
+}
+
 function InputSearch(props: IProps) {
-    const { colorList, setColorList, getColorInfo } = props;
-    const [searchText, setSearchText] = useState<string>();
-    const [hexResult, setHexResult] = useState<string>();
+    const {
+        search,
+        setSearch,
+        colorList,
+        setColorList,
+        getColorInfo
+    } = props;
 
-    const getSimilarColorsByHex = (hex: string) => {
-        let sortedlist: any = [];
-        colorList.forEach((list) => {
-            const similarColors = hexColorDelta(hex, list.hex.split("#")[1]);
-            if (similarColors > 0.95) {
-                sortedlist.push(list);
-            }
-        });
-        if (sortedlist.length > 0) {
-            setHexResult("#" + hex);
-            setColorList(sortedlist.slice(0, 100));
-        } else {
-            toaster(ToasterType.ERROR, "Colour is invalid")
-        }
-    }
-
-    const searchColour = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    const getColorValueFromInput = (event: React.KeyboardEvent<HTMLDivElement>) => {
+        const enteredText = (event.target as HTMLInputElement).value.trim();
         if (event.key === 'Enter') {
-            if ((event.target as HTMLInputElement).value) {
-                const enteredText = (event.target as HTMLInputElement).value.trim();
-
-                if (enteredText?.charAt(0) === "#") {
-                    const hex = enteredText.split("#")[1];
-                    getSimilarColorsByHex(hex);
-                } else if (enteredText?.substring(0, 3) === "rgb") {
-                    const rgbValue = enteredText?.slice(4, enteredText.length - 1).split(',');
-                    const r = parseInt(rgbValue[0]);
-                    const g = parseInt(rgbValue[1]);
-                    const b = parseInt(rgbValue[2]);
-                    const rgbToHexValue = rgbToHex(r, g, b);
-                    setHexResult("#" + rgbToHexValue);
-                    getSimilarColorsByHex(rgbToHexValue);
-                } else {
-                    setColorList([]);
-                    toaster(ToasterType.ERROR, "Colour is invalid")
-                }
-                // Set Entered value
-                setSearchText(enteredText);
-            }
+            const { sortedColorList, hex }: ISearchInfo = searchColour(enteredText, colorList);
+            setSearch({ ...search, hex });
+            setColorList(sortedColorList);
         }
     }
 
     const searchByColour = (value: string) => {
-        if (value?.length === 0) {
-            setSearchText("");
+        if (value.trim().length === 0) {
+            setSearch({ ...search, text: "" });
             getColorInfo();
         }
     }
 
+    const handleSubmit = (e: any) => {
+        e.preventDefault();
+        const { sortedColorList, hex }: ISearchInfo = searchColour(search.pickerValue, colorList);
+        setSearch({ ...search, hex });
+        setColorList(sortedColorList);
+    }
+
+    const resetColorPickerValue = () => {
+        setSearch({ ...search, text: "", pickerValue: "#000000" });
+        getColorInfo();
+    }
+
     return (
         <Row className='pt-3'>
-            <Col lg="3" md="3" sm="12">
+            <Col lg="5" md="5" sm="12">
                 <Label for="search" >
                     Colour
                 </Label>
-                <Input
-                    id="search"
-                    type="text"
-                    placeholder='Enter Colour'
-                    onKeyDown={searchColour}
-                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => searchByColour(event.target.value)}
-                />
+                <div className={style.InputSearch__inputContainer}>
+                    <Input
+                        id="search"
+                        type="text"
+                        placeholder='Enter Colour'
+                        onKeyDown={getColorValueFromInput}
+                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => searchByColour(event.target.value)}
+                    />
+                    <div className={style.InputSearch__orContainer}>OR</div>
+                    <Form onSubmit={handleSubmit}>
+                        <div className={style.InputSearch__inputContainer}>
+                            <Input
+                                type="color"
+                                value={search.pickerValue}
+                                className={style.InputSearch__inputColorPicker}
+                                onChange={(event: React.ChangeEvent<HTMLInputElement>) => setSearch({ ...search, pickerValue: event.target.value })}
+                            />
+                            <Button
+                                type="submit"
+                                className={`btn-sm btn-success ${style.InputSearch__submitColor} ${style.InputSearch__orContainer}`}>
+                                Try it
+                            </Button>
+                            <Button
+                                type="button"
+                                className={`btn-sm btn-secondary ${style.InputSearch__submitColor} ${style.InputSearch__orContainer}`}
+                                onClick={resetColorPickerValue}
+                            >
+                                Reset
+                            </Button>
+                        </div>
+                    </Form>
+                </div>
                 <div className='pt-3'>
-                    {searchText ?
-                        <p>Results for "{hexResult}" </p>
+                    {search.text ?
+                        <p>Results for "{search.text}" </p>
                         :
                         <p>All Colors.</p>
                     }
                 </div>
-            </Col>
-            <Col lg="9" md="9" sm="12"></Col>
-        </Row>
+            </Col >
+            <Col lg="7" md="7" sm="12"></Col>
+        </Row >
     )
 }
 

@@ -20,7 +20,6 @@ export const toaster = (type: ToasterType, message: string) => {
         case ToasterType.SUCCESS:
             toast.success(message, options);
             break;
-
         case ToasterType.ERROR:
             toast.error(message, options);
             break;

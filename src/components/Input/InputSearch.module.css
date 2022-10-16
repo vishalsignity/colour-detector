@@ -1,0 +1,17 @@
+.InputSearch__inputContainer {
+    display: flex;
+    align-items: center;
+}
+
+.InputSearch__orContainer {
+    margin: 0px 10px;
+}
+
+.InputSearch__inputColorPicker {
+    height: 30px !important;
+    width: 75px !important;
+}
+
+.InputSearch__submitColor {
+    width: 75px !important;
+}

@@ -5,11 +5,12 @@ import { Col, Row, Spinner } from 'reactstrap';
 import style from "./App.module.css";
 import ColorTable from './components/Table/ColorTable';
 import { hexToHSL, hexToRgb } from './utils';
-import { IColorList } from './utils/interfaces';
+import { IColorList, ISearch } from './utils/interfaces';
 import InputSearch from './components/Input/InputSearch';
 
 function App() {
   const [colorList, setColorList] = useState<IColorList[]>();
+  const [search, setSearch] = useState<ISearch>({ text: "", hex: "", pickerValue: "#000000" });
 
   const getColorInfo = () => {
     axios.get('https://raw.githubusercontent.com/okmediagroup/color-test-resources/master/xkcd-colors.json')
@@ -36,6 +37,8 @@ function App() {
         <Col lg="12" md="12" sm="12">
           <h2>Colour Searcher</h2>
           <InputSearch
+            search={search}
+            setSearch={setSearch}
             colorList={colorList!}
             setColorList={setColorList}
             getColorInfo={getColorInfo}

@@ -10,3 +10,9 @@ export enum ToasterType {
     SUCCESS = "SUCCESS",
     ERROR = "ERROR"
 }
+
+export interface ISearch {
+    text: string;
+    hex: string;
+    pickerValue: string;
+}
