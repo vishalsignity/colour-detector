@@ -37,7 +37,7 @@ function InputSearch(props: IProps) {
 
     const searchByColour = (value: string) => {
         if (value.trim().length === 0) {
-            setSearch({ ...search, text: "" });
+            setSearch({ ...search, hex: "" });
             getColorInfo();
         }
     }
@@ -50,7 +50,7 @@ function InputSearch(props: IProps) {
     }
 
     const resetColorPickerValue = () => {
-        setSearch({ ...search, text: "", pickerValue: "#000000" });
+        setSearch({ ...search, hex: "", pickerValue: "#000000" });
         getColorInfo();
     }
 
@@ -93,8 +93,8 @@ function InputSearch(props: IProps) {
                     </Form>
                 </div>
                 <div className='pt-3'>
-                    {search.text ?
-                        <p>Results for "{search.text}" </p>
+                    {search.hex ?
+                        <p>Results for "{search.hex}" </p>
                         :
                         <p>All Colors.</p>
                     }

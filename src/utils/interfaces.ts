@@ -12,7 +12,6 @@ export enum ToasterType {
 }
 
 export interface ISearch {
-    text: string;
     hex: string;
     pickerValue: string;
 }
