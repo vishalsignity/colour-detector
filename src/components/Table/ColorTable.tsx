@@ -1,5 +1,5 @@
 import React from 'react'
-import { Col, Row, Table } from 'reactstrap'
+import { Button, Col, Row, Table } from 'reactstrap'
 import { IColorList, IColorListFullDetail } from '../../utils/interfaces';
 import style from "./ColorTable.module.css";
 
@@ -7,14 +7,20 @@ interface IProps {
     searchingText: string;
     colorList: IColorListFullDetail;
     columnList: string[];
+    getColorInfo: () => void;
 }
 
 function ColorTable(props: IProps) {
-    const { searchingText, colorList, columnList } = props;
+    const { searchingText, colorList, columnList, getColorInfo } = props;
 
     return (
         <Row>
             <Col lg="12" md="12" sm="12">
+                {colorList.list.length === 0 && (
+                    <div className='text-center'>
+                        <Button type='button' className='btn-md btn-success' onClick={getColorInfo}>Retry</Button>
+                    </div>
+                )}
                 <Table borderless className={style.ColorTable__tableContainer}>
                     <thead>
                         <tr>
