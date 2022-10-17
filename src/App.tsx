@@ -3,17 +3,17 @@ import { useEffect, useState } from 'react';
 import { Col, Row, Spinner } from 'reactstrap';
 import style from "./App.module.css";
 import ColorTable from './components/Table/ColorTable';
-import { IColorList, ISearch } from './utils/interfaces';
+import { IColorListFullDetail, ISearch } from './utils/interfaces';
 import InputSearch from './components/Input/InputSearch';
 import { getAllColorsAPI } from './utils/api';
 
 function App() {
-  const [colorList, setColorList] = useState<IColorList[]>();
+  const [list, setList] = useState<IColorListFullDetail>();
   const [search, setSearch] = useState<ISearch>({ hex: "", pickerValue: "#000000" });
 
   const getColorInfo = async () => {
     const colorInfo: any = await getAllColorsAPI();
-    setColorList(colorInfo);
+    setList({ list: colorInfo, sorted: [] });
   }
 
   useEffect(() => {
@@ -28,16 +28,17 @@ function App() {
           <InputSearch
             search={search}
             setSearch={setSearch}
-            colorList={colorList!}
-            setColorList={setColorList}
+            list={list!}
+            setList={setList}
             getColorInfo={getColorInfo}
           />
-          {colorList !== undefined ? (
+          {list?.list !== undefined ?
             <ColorTable
+              searchingText={search.hex}
               columnList={['', 'Name', 'Hex', 'RGB', 'HSL']}
-              colorList={colorList!}
+              colorList={list!}
             />
-          ) :
+            :
             <div className={style.App__loaderContainer}>
               <div className={style.App__loadingList}>Loading...</div>
               <Spinner>

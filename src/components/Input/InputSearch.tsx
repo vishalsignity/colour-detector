@@ -1,14 +1,14 @@
 import React from 'react'
 import { Button, Col, Form, Input, Label, Row } from 'reactstrap'
 import { searchColour } from '../../utils';
-import { IColorList, ISearch } from '../../utils/interfaces';
+import { IColorList, IColorListFullDetail, ISearch } from '../../utils/interfaces';
 import style from "./InputSearch.module.css";
 
 interface IProps {
     search: ISearch;
     setSearch: (value: ISearch) => void;
-    colorList: IColorList[];
-    setColorList: (value: IColorList[]) => void;
+    list: IColorListFullDetail;
+    setList: (value: IColorListFullDetail) => void;
     getColorInfo: () => void;
 }
 
@@ -21,17 +21,17 @@ function InputSearch(props: IProps) {
     const {
         search,
         setSearch,
-        colorList,
-        setColorList,
+        list,
+        setList,
         getColorInfo
     } = props;
 
     const getColorValueFromInput = (event: React.KeyboardEvent<HTMLDivElement>) => {
         const enteredText = (event.target as HTMLInputElement).value.trim();
         if (event.key === 'Enter') {
-            const { sortedColorList, hex }: ISearchInfo = searchColour(enteredText, colorList);
+            const { sortedColorList, hex }: ISearchInfo = searchColour(enteredText, list.list);
             setSearch({ ...search, hex });
-            setColorList(sortedColorList);
+            setList({ ...list, sorted: sortedColorList });
         }
     }
 
@@ -44,9 +44,9 @@ function InputSearch(props: IProps) {
 
     const handleSubmit = (e: any) => {
         e.preventDefault();
-        const { sortedColorList, hex }: ISearchInfo = searchColour(search.pickerValue, colorList);
+        const { sortedColorList, hex }: ISearchInfo = searchColour(search.pickerValue, list.list);
         setSearch({ ...search, hex });
-        setColorList(sortedColorList);
+        setList({ ...list, sorted: sortedColorList });
     }
 
     const resetColorPickerValue = () => {

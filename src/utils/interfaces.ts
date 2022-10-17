@@ -15,3 +15,8 @@ export interface ISearch {
     hex: string;
     pickerValue: string;
 }
+
+export interface IColorListFullDetail {
+    list: IColorList[];
+    sorted: IColorList[];
+}
