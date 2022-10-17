@@ -63,6 +63,7 @@ function InputSearch(props: IProps) {
                 <div className={style.InputSearch__inputContainer}>
                     <Input
                         id="search"
+                        data-testid="color__search"
                         type="text"
                         placeholder='Enter Colour'
                         onKeyDown={getColorValueFromInput}
@@ -78,6 +79,7 @@ function InputSearch(props: IProps) {
                                 onChange={(event: React.ChangeEvent<HTMLInputElement>) => setSearch({ ...search, pickerValue: event.target.value })}
                             />
                             <Button
+                                data-testid="try__btn"
                                 type="submit"
                                 className={`btn-sm btn-success ${style.InputSearch__submitColor} ${style.InputSearch__orContainer}`}>
                                 Try it
