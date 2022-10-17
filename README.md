@@ -1,5 +1,4 @@
 ## Colour Detector
-- Clone: git clone https://github.com/vishalsignity/colour-detector.git
-- git checkout colour-detector-test
+- Clone: git clone https://gitlab.signitysolutions.co.in/reactjs/colour-detector.git
 - npm install
 - npm start
