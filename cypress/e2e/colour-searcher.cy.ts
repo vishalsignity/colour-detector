@@ -1,4 +1,6 @@
-before(() => {
+/// <reference types="cypress" />
+
+beforeEach(() => {
   cy.viewport(1280, 720);
 });
 
@@ -32,7 +34,7 @@ describe('Colour Searcher', () => {
     cy.contains(`Results for "#a8ff04"`).should('exist');
     // Clear Input field
     cy.get('[data-testid=color__search]').clear();
-    // Value for hex value
+    // hex value from the color picker
     cy.get('[data-testid=try__btn]').click();
     cy.contains(`Results for "#000000"`).should('exist');
   });
